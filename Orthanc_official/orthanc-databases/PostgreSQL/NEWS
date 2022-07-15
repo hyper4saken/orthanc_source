@@ -1,0 +1,144 @@
+Pending changes in the mainline
+===============================
+
+* Upgraded dependencies for static builds (notably on Windows and LSB):
+  - openssl 3.0.1
+
+
+Release 4.0 (2021-04-22)
+========================
+
+* New option "IndexConnectionsCount" to control how many simultaneous
+  connections to the PostgreSQL database are used by the index plugin
+* Support of revisions for metadata and attachments
+* Support of multiple readers/writers, by handling retries from Orthanc SDK 1.9.2
+* Support of range reads for the storage area, from Orthanc SDK 1.9.0
+* Fix issue #193 (LSB binaries crash with PostgreSQL + SSL) by changeset
+  in OrthancFramework: https://hg.orthanc-server.com/orthanc/rev/9a9118406484
+* Fix issue #151 (Storage failures when running with two instances and PG_LOCK=false)
+
+
+Release 3.3 (2020-12-14)
+========================
+
+* Added an advisory lock to avoid race conditions during database setup
+* Added "MaximumConnectionRetries" & "ConnectionRetryInterval" to configure 
+  the retries when connecting to the DB at startup
+* Support of dynamic linking against the system-wide Orthanc framework library
+* Upgraded dependencies for static builds (notably on Windows and LSB):
+  - openssl 1.1.1g
+  - libpq 13.1 (replacing libpq 9.6.1)
+
+
+Release 3.2 (2019-03-01)
+========================
+
+* Explicit deallocation of prepared statements
+
+
+Release 3.1 (2019-02-08)
+========================
+
+* Fix build on Debian Buster
+* Remove "ASSERT" in SQL for compatibility with older releases of PostgreSQL
+* Implementation of new extensions: LookupResourceAndParent and GetAllMetadata
+* Performance: Defining option "TCP_NODELAY" if libpq is linked statically
+
+
+Release 3.0 (2019-01-21)
+========================
+
+* New configuration option: "EnableSsl"
+* Database optimizations by implementing new primitives of Orthanc SDK 1.5.2
+* Fix issue 105 (Unable to connect to PostgreSQL database using SSL)
+* Fix Debian issue #906771 (Uncaught exception prevents db intialization
+  (likely related to pg_trgm))
+* Fix: Catching exceptions in destructors
+
+
+Release 2.2 (2018-07-16)
+========================
+
+!! Important remark when upgrading from an older version of the plugin:
+
+   The plugin will create a new index to improve search performance.
+   This can take several minutes at the first Orthanc startup. Orthanc
+   will not be available during this period. On a PostgreSQL database
+   with 100,000 studies, we have observed that updating the index took
+   around 10 minutes.
+
+* Migration into the "orthanc-databases" repository
+* Full refactoring to share code with MySQL
+* Fix issue 41 (Additional range IdentifierConstraintType in Orthanc)
+  !! This fix requires Orthanc version >= 1.4.0
+* Fix issue 47 (Index improvements for PG plugin)
+* Fix issue 76 (PG connection shall reconnect/retry in case it loses
+  the connection to the server)
+
+
+Release 2.1 (2018-04-20)
+========================
+
+* Running transactions in "Serializable" isolation level to avoid 
+  inconsistencies if multiple Orthanc are writing to the same DB
+* Upgrade to PostgreSQL 9.6.1 client library for static builds
+* Performance warning if runtime debug assertions are turned on
+* Fix issue 62 (use correct type for lo_read() value)
+* Fix issue 63 (allow to connect without specifing username and/or port)
+* Fix issue 68 (PostgreSQL plugin needs extra flags to compile)
+* Resort to Orthanc framework
+* Support of Linux Standard Base, OpenBSD and FreeBSD
+
+
+Release 2.0 (2015-12-02)
+========================
+
+=> Minimum SDK version: 0.9.5 <=
+=> Supported database versions: 5 (upgrade only) and 6 <=
+
+* Support version 6 of the database schema
+* The "value" column of tables "MainDicomTags" and "DicomIdentifiers" are now TEXT instead of BYTEA
+
+
+Release 1.3 (2015-10-07)
+========================
+
+=> Minimum SDK version: 0.9.4 <=
+=> Supported database versions: 5 <=
+
+* Fix build with Orthanc plugin SDK 0.9.4
+* Implementation of "GetAllPublicIdsWithLimit" extension
+* Implementation of "UpgradeDatabase" extension
+
+
+Release 1.2 (2015-08-02)
+========================
+
+=> Minimum SDK version: 0.9.1 <=
+
+* Inject version information into Windows binaries
+* CMake flag to prevent compiling the unit tests (if no PostgreSQL test server is available)
+* Update to Boost 1.58.0 for static and Windows builds
+* Support of OS X compilation
+
+
+Release 1.1 (2015-07-03)
+========================
+
+* Fixes
+* Support of Visual Studio 2008
+* Support of FreeBSD thanks Mikhail <mp39590@gmail.com>
+
+
+Release 1.0 (2015-02-27)
+========================
+
+* Use of advisory locks
+* Support of connection URI in PostgreSQL
+* Options "EnableIndex" and "EnableStorage" to explicitly enable PostgreSQL
+
+
+2015-02-06
+==========
+
+* Initial release

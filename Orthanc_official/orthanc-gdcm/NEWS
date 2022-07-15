@@ -1,0 +1,45 @@
+Pending changes in the mainline
+===============================
+
+
+Version 1.5 (2022-03-23)
+========================
+
+* Take the configuration option "RestrictTransferSyntaxes" into
+  account not only for decoding, but also for transcoding
+* Upgrade to GDCM 3.0.10 for static builds
+
+
+Version 1.4 (2021-07-06)
+========================
+
+* Prevent transcoding of 1bpp DICOM images, as this might crash GDCM
+
+
+Version 1.3 (2021-06-14)
+========================
+
+* Prevent changing SOP class UID from "MR Image Storage" to "Enhanced
+  MR Image Storage" during the transcoding
+
+
+Version 1.2 (2020-12-17)
+========================
+
+* Temporarily prevent transcoding of 16bpp images to JPEG, as this might crash GDCM
+* Upgrade to GDCM 3.0.8 for static builds
+
+
+Version 1.1 (2020-08-05)
+========================
+
+* Fix transcoding of DICOM files encoded using an implicit transfer syntax
+* Support of dynamic linking against the system-wide Orthanc framework library
+* Upgrade to GDCM 3.0.7 for static builds
+
+
+Version 1.0 (2020-05-25)
+========================
+
+* Initial release, by migration out of the Orthanc samples
+* Upgrade to GDCM 3.0.6 for static builds

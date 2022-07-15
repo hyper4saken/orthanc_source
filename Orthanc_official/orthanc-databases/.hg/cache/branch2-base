@@ -1,0 +1,21 @@
+c34510606a18715c4e57d6b1186e643c59840d72 364
+eeef33903f7795a9afee2f2834af92441d0404af c OrthancMySQL-1.0
+ff9ae0b463602ea606b241aceb8588cd68022ff2 c OrthancMySQL-1.1
+260fc55f10cd1c9a80e99faeedfb26034de57544 o OrthancMySQL-2.0
+76d53dcfb92b1c57b40d652947dd5b5b555bdd86 c OrthancMySQL-3.0
+ba4eb85e3283d4b6de62004124366e9d546b7068 c OrthancMySQL-4.0
+f0704e57476bf966fbe31e9ae229ca710f819935 c OrthancMySQL-4.1
+3451026ce7d07783ccaded34ca69dfb4dd9e5d75 c OrthancMySQL-4.2
+9660def786492ce332d0ff924cf00fae12f532fc o OrthancMySQL-4.3
+122cd2d4e7341f17496d075d07c1bacd0ff4b5ae c OrthancOdbc-1.0
+c34510606a18715c4e57d6b1186e643c59840d72 o OrthancOdbc-1.1
+05aa1bdc32de6c2abe21c1bf8c56e90346b883ef c OrthancPostgreSQL-2.2
+2d9631b3e8c0a200104d580d4ee5c5b0b676ce82 c OrthancPostgreSQL-3.0
+592b1db14fda86bf15d0617260138168a3b39699 c OrthancPostgreSQL-3.1
+2014b59d2ef39feeb35538650105afd9c2ae27cd c OrthancPostgreSQL-3.2
+47db0b70f70585be0a5b5f35ff649cd44f7bf18f c OrthancPostgreSQL-3.3
+e55e4e8f94598de1629c573006a22a3f256a1fd7 o OrthancPostgreSQL-4.0
+c24d05cb72c11ee810b7571cdf143fc3ca805c0a c db-changes
+a39038c4094aeddf01819afaad6dbbb21765d896 o default
+215782cadfc2d47e15230f1840bc8bbde3a086aa o optimized-routes
+eb379b32f7caf45457a2dbdc1b8ca54f038a6b0e c pg-tcp-nodelay

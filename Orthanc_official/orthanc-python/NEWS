@@ -1,0 +1,84 @@
+Pending changes in the mainline
+===============================
+
+
+Version 4.0 (2022-02-23)
+========================
+
+=> Minimum SDK version: 1.10.0 <=
+
+* New functions from the SDK wrapped in Python:
+  - orthanc.RegisterIncomingCStoreInstanceFilter()
+  - orthanc.RegisterReceivedInstanceCallback()
+
+
+Version 3.4 (2021-08-31)
+========================
+
+* On Orthanc stopping, wait for all the queued events to have been processed
+* Docker-based builder scripts distinguishing Debian buster and bullseye
+
+
+Version 3.3 (2021-08-12)
+========================
+
+* New Python function: "orthanc.RegisterStorageArea()"
+* Custom exception "orthanc.OrthancException" is raised instead of "ValueError"
+
+
+Version 3.2 (2021-06-11)
+========================
+
+* New functions from the SDK wrapped in Python:
+  - orthanc.CreateDicom()
+  - orthanc.CreateImageFromBuffer()
+  - orthanc.DicomInstance.GetInstanceData()
+  - orthanc.FindQuery.GetFindQueryTagElement()
+  - orthanc.FindQuery.GetFindQueryTagGroup()
+  - orthanc.Image.GetImageBuffer()
+  - orthanc.LookupDictionary()
+  - orthanc.RegisterFindCallback()
+  - orthanc.RegisterMoveCallback()
+  - orthanc.RegisterWorklistCallback()
+  - orthanc.WorklistAnswers.WorklistAddAnswer()
+
+NB: SDK coverage is about 87% (138 functions wrapped in Python vs. 158 in SDK)
+
+
+Version 3.1 (2021-01-22)
+========================
+
+* Fix possible deadlock with "orthanc.RegisterOnChangeCallback()"
+* During Orthanc shutdown, wait for all the pending events to have been processed
+
+
+Version 3.0 (2020-12-09)
+========================
+
+=> Minimum SDK version: 1.8.1 <=
+
+* New Python function: "orthanc.RegisterIncomingHttpRequestFilter()"
+* Support of Apple OS X
+* Fix issue #185 (segfaults on non-UTF8 special characters in request URI)
+
+
+Version 2.0 (2020-07-08)
+========================
+
+=> Minimum SDK version: 1.7.2 <=
+
+* Wrapped more functions
+* Fix compilation using Visual Studio
+* The "Calling Python..." info logs are disabled if "PythonVerbose" is "false"
+* New builders for Windows: Supporting 32 / 64bit with Python 2.7 / 3.7 / 3.8
+* Support of dynamic linking against the system-wide Orthanc framework library
+
+NB: SDK coverage is about 75% (119 functions wrapped in Python vs. 157 in SDK)
+
+
+Version 1.0 (2020-04-01)
+========================
+
+=> Minimum SDK version: 1.5.7 <=
+
+* Initial release

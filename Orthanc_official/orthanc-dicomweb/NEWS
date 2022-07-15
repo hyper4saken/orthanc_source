@@ -1,0 +1,259 @@
+Pending changes in the mainline
+===============================
+
+* speed-up the /metadata routes by a factor of 2 when in "MainDicomTags" or "Extrapolate"
+  mode.
+
+
+
+Version 1.9 (2022-06-30)
+========================
+
+=> Minimum SDK version: 1.9.2 <=
+=> Minimum Orthanc version: 1.11.1 <=
+
+* if using "MainDicomTags" mode for "SeriesMetadata" and "StudiesMetadata",
+  the plugin now returns the "ExtraMainDicomTags" that have been configured on Orthanc side.
+* Now able to return sequences stored in "ExtraMainDicomTags" (with Orthanc 1.11.1)
+* refactored the way WADO-RS locate resources.  If the same SeriesInstanceUID is re-used
+  across multiple Studies, the plugin should now locate it correctly.
+* HTTP headers are now forwarded to "tools/find" route in Orthanc allowing user to overwrite
+  the "tools/find" route in e.g. a python plugin to limit the returned results based on e.g
+  an authentication token in an HTTP header.  The "tools/find" route is mainly used in QIDO-RS.
+  HTTP headers are not forward to GET routes in Orthanc.  If you want to check authorization
+  for these routes, it is recommended to perform it in "IncomingHttpRequestFilter" in Lua or
+  with the authorization plugin.
+
+
+
+Version 1.8 (2022-05-09)
+========================
+
+=> Minimum Orthanc version: 1.11.0 <=
+
+* Show an error message when trying to send studies > 4GB via STOW-RS
+* Optimized QIDO-RS to build its responses from DB if tags are saved in "ExtraMainDicomTags".
+  Recommended configuration to optmize dicom-web usage:
+    "ExtraMainDicomTags" : {
+      "Instance" : [
+        "Rows",
+        "Columns",
+        "ImageType",
+        "SOPClassUID",
+        "ContentDate",
+        "ContentTime",
+        "FrameOfReferenceUID",
+        "PixelSpacing",
+        "SpecificCharacterSet",
+        "BitsAllocated",
+        "BitsStored"
+      ],
+      "Series" : [
+        "TimezoneOffsetFromUTC",
+        "PerformedProcedureStepStartDate",
+        "PerformedProcedureStepStartTime"
+      ],
+      "Study": [
+        "TimezoneOffsetFromUTC"
+      ],
+      "Patient": []
+    }
+* New configuration "PublicRoot" that is used in RetrieveUrl tags
+  and location information.  This is useful if, e.g, your Orthanc is
+  behind a reverse-proxy and has another base endpoint than the "Root"
+  one.  Note that, if using a reverse-proxy, make sure to set the "host"
+  and "proto" correctly in the "Forwarded" HTTP headers.
+
+
+Version 1.7 (2021-08-31)
+========================
+
+* Detection of windowing and rescale in ".../rendered" for Philips multiframe images
+
+
+Version 1.6 (2021-05-07)
+========================
+
+* New field "Timeout" in "DicomWeb.Servers" to specify HTTP timeout on a per-server basis
+* Reduced memory consumption in STOW-RS server thanks to an optimization of
+  Orthanc::MultipartStreamReader in Orthanc framework 1.9.3
+* Fix issue #194 (Upgrade media types to DICOM 2021a, cf. table 8.7.3-5)
+* Fix issue #196 (STOW-RS: Should return 200 only when successfully stored all instances)
+
+
+Version 1.5 (2021-01-26)
+========================
+
+* Possibility to store the definition of DICOMweb servers into the Orthanc database
+* New configuration option "DicomWeb.ServersInDatabase"
+* Fix compliance with DICOM >= 2016c: If no "transfer-syntax" is provided in WADO-RS
+  Retrieve Instance/Series/Study, DICOM shall be transcoded to Little Endian Explicit
+
+
+Version 1.4 (2020-12-18)
+========================
+
+* "Extrapolate" mode doesn't fail if no consensus is found in WADO-RS Retrieve Metadata.
+  This is necessary for proper behavior of the Stone Web viewer on very small series.
+* Fix issue #190 (STOW-RS fails is multipart boundary is surrounded by quotes in headers)
+
+
+Version 1.3 (2020-10-19)
+========================
+
+* Support transcoding in WADO-RS RetrieveStudy, RetrieveSeries and RetrieveInstance
+* Support of dynamic linking against the system-wide Orthanc framework library
+* Support rendering of images whose pixel format is uint8_t
+* Fix ".../rendered" on MONOCHROME1 images
+* Fix default windowing in rendered frames using WADO-URI and WADO-RS
+* More verbose logs to debug chunked transfers
+
+
+Version 1.2 (2020-05-26)
+========================
+
+=> Minimum SDK version: 1.7.0 <=
+
+* Removed dependency on GDCM
+* "QidoCaseSensitive" defaults to "CaseSensitivePN" of Orthanc configuration (instead of "true")
+
+
+Version 1.1 (2020-03-04)
+========================
+
+New features
+------------
+
+* Support of "window", "viewport" and "quality" parameters in "Retrieve Rendered Transaction"
+* Support of "/studies/.../rendered" and "/studies/.../series/.../rendered"
+* QIDO-RS: Allow to query against a list of multiple values separated by commas
+* WADO-RS "Retrieve Metadata": Configuration options "StudiesMetadata"
+  and "SeriesMetadata", whose value can be "Full" (read all DICOM
+  instances from the storage area), "MainDicomTags" (only report the
+  main DICOM tags from the Orthanc database), or "Extrapolate" (main
+  DICOM tags + user-specified tags extrapolated from a few random instances)
+
+Maintenance
+-----------
+
+* QIDO-RS: Optimization for large studies/series
+* QIDO-RS: Fix returned attributes if Study/Series Instance UIDs are not filtered
+* Fix handling of the "Forwarded" HTTP header
+* Fix support for client certificate authentication
+* Accept multiple MIME types in Accept header for WADO-RS "Retrieve Metadata"
+  https://groups.google.com/d/msg/orthanc-users/P3B6J9abZpE/syn5dnW2AwAJ
+* Added explicit "Accept" header to avoid uncompressing DICOM files by Google cloud,
+  can be turned off by setting "HasWadoRsUniversalTransferSyntax" to "false" (for
+  instance if contacting a remote Orthanc plugin with DICOMweb version <= 1.0)
+  https://groups.google.com/d/msg/orthanc-users/w1Ekrsc6-U8/T2a_DoQ5CwAJ
+* Fix issue #162 ("DICOMweb metadata resource reads all instances")
+* Fix issue #164 ("JPEG YBR_422 generates a 500 in the DicomWeb plugin")
+* Upgrade to GDCM 3.0.4 in static builds
+
+
+Version 1.0 (2019-06-26)
+========================
+
+=> Recommended SDK version: 1.5.7 <=
+=> Minimum SDK version: 1.5.4 <=
+
+* Web user interface to QIDO-RS, WADO-RS and STOW-RS client
+* First implementation of WADO-RS "Retrieve Rendered Transaction", for
+  ".../instances/.../rendered" and ".../instances/.../frames/.../rendered"
+* WADO-RS and STOW-RS client now create Orthanc jobs
+* Support "Transfer-Encoding: chunked" to reduce memory consumption in STOW-RS
+  (provided the SDK version is above 1.5.7)
+* New URI: /dicom-web/servers/.../qido
+* New URI: /dicom-web/servers/.../delete
+* Handling of the HTTP header "Forwarded" for WADO-RS
+* Full refactoring of multipart parsing
+
+
+Version 0.6 (2019-02-27)
+========================
+
+=> Minimum SDK version: 1.5.4 <=
+
+* Sending "HttpHeaders" of the "DicomWeb.Servers" configuration to remote DICOMweb servers
+* Improved WADO-RS compatibility if Orthanc is acting as a DICOMweb client
+* More detailed information about errors is provided in the HTTP answers
+* Fix issue #96 / #5 (WADO-RS: RetrieveFrames rejects valid accept headers)
+* Fix issue #111 / #3 (QIDO-RS: wrong serialization of empty values)
+* Fix issue #112 / #4 (QIDO-RS: wrong serialization of number values)
+* Fix issue #113 / #2 (QIDO-RS: wrong serialization of PN VR)
+* Upgrade to GDCM 2.8.8 in static builds
+
+
+Version 0.5 (2018-04-19)
+========================
+
+* New option: "QidoCaseSensitive" to make queries to QIDO-RS server case insensitive
+* Defaults to JSON answers instead of XML
+* Use of "application/dicom+json" MIME type instead of "application/json"
+* Added "?expand" argument to "/servers" route
+* Fix generation of numeric tags part of sequences for ".../metadata" routes
+* Support for OpenBSD
+* Support for Linux Standard Base
+* Upgrade to GDCM 2.8.4 in static builds
+* Resort to Orthanc framework
+
+
+Version 0.4 (2017-07-19)
+========================
+
+* Improved robustness in the STOW-RS server (occurrences of "\r\n\r\n" in DICOM are supported)
+* Performance warning if runtime debug assertions are turned on
+* WADO-RS client supports quoted Content-Type header in HTTP answers
+* Added "Arguments" to WADO-RS and STOW-RS client to handle query arguments in uri
+* Using MIME types of DICOM version 2017c in WADO RetrieveFrames
+* Fix issue #53 (DICOMWeb plugin support for "limit" and "offset" parameters in QIDO-RS)
+* Fix issue #28 (Non-compliant enumerations for "accept" header for WADO RetrieveFrames)
+
+
+Version 0.3 (2016-06-28)
+========================
+
+=> Minimum SDK version: 1.1.0 <=
+
+* STOW-RS client with URI "/{dicom-web}/servers/{id}/stow"
+* QIDO-RS and WADO-RS client with URI "/{dicom-web}/servers/{id}/get"
+* Retrieval of DICOM instances with WADO-RS through URI "/{dicom-web}/servers/{id}/retrieve"
+* Improved robustness in the STOW-RS server
+* Fix issue #13 (QIDO-RS study-level query is slow)
+* Fix issue #14 (Aggregate fields empty for QIDO-RS study/series-level queries)
+
+
+Version 0.2 (2015-12-10)
+========================
+
+=> Minimum SDK version: 0.9.5 <=
+
+* Support of WADO-RS - RetrieveFrames
+* QIDO-RS now takes advantage of "/tools/find"
+* Upgrade to GDCM 2.6.0 for static and Windows builds
+
+
+Version 0.1 (2015-08-03)
+========================
+
+=> Minimum SDK version: 0.9.1 <=
+
+* Support of WADO-RS - RetrieveMetadata
+* Support of WADO, in addition to DICOMweb
+* All the APIs are now under the same root
+
+Production
+----------
+
+* Inject version information into Windows binaries
+* Use of Orthanc built-in API for multipart answers (requires Orthanc >= 0.9.1)
+* Support of Visual Studio 2008
+* Support of FreeBSD
+* Support of OS X
+* Upgrade to Boost 1.58.0 for static and Windows builds
+
+
+2015-03-13
+==========
+
+* Initial commit
